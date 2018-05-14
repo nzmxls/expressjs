@@ -1,9 +1,18 @@
-html
-    head
-        link(rel="stylesheet", href="style.css")
-        title From Express js
-        
-    body
-        h1(class="hh") Hello world  
-        h3(class="hh") #{age}
-        h4(class="new") #{marks}
+extends base.pug
+
+block title
+    title output page
+
+block content
+    h1(class="hh") Hello world  
+    h3(class="hh") #{age}
+    h3(class="nn") #{name}
+
+    -var u = {user :'sdf'}
+    #u
+    if u.user == 'sdf'
+        h3(class="container" id="34") User is Exist
+        h2.row this is row
+    else
+        h3.cont User is Exist
+        h2.col this is row        
