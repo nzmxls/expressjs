@@ -7,6 +7,9 @@ var bodyparser = require('body-parser')
 
 var multer = require('multer')
 var upload = multer();
+var sqlite3 = require('sqlite3').verbose()
+var db = new sqlite3.Database('C:/Users/alimx/Desktop/expressjs/sql.db')
+
 
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended:true}));
@@ -21,11 +24,38 @@ app.get('/', function(req, res) {
 
 app.post('/new',function(req,res){
     console.log(req.body)
-    res.render(path.join(__dirname+'/template/abc.pug'),{name:req.body.name,age:req.body.age})
-    
+    const query=`insert into student(roll_no,name) values(${req.body.rollno},"${req.body.name}")`
+    //res.render(path.join(__dirname+'/template/abc.pug'),{name:req.body.name,age:req.body.age})
+    //var stmt = db.prepare('insert into Student values(??)')
+    //stmt.run(req.body.rollno,req.body.name)
+    db.run(query)
+    //stmt.run
+    //console.log(stmt)
+    //res.send("success")
+    query="select * from Student"
+    var r =[]
+    var n =[]
+    db.each(query,function(err,row){
+        r.push(row.rollno)
+        n.push(row.name)
+        //console.log(row.rollno,row.name)
+    })
+    res.render(path.join(__dirname+'/template/abc.pug'),{name:n,roll:r})
+    //res.send('successf')
 })
 
-
+app.get('/data',function(req,res){
+    query="select * from Student"
+    var r =[]
+    var n =[]
+    db.each(query,function(err,row){
+        r.push(row.rollno)
+        n.push(row.name)
+        console.log(row.roll_no+' : '+row.name)
+    })
+    //res.render(path.join(__dirname+'/template/abc.pug'),{name:n,roll:r})
+    res.send('successf')
+})
 
 app.post('/post', function(req,res){
     console.log()
